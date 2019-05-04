@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 
 //css
-import './App.css';
+import classes from './App.css';
 //components
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
 import Person from './Person/Person';
 
 class App extends Component {
@@ -42,48 +43,38 @@ class App extends Component {
   }
 
   render(){
-    const style = {
-      backgroundColor:'green',
-      color:'white',
-      font:'inherit',
-      border:'1px solid blue',
-      padding:'8px',
-      cursor: 'pointer'
-    };
-
     let persons = null;
+    let btnClass = '';
     if (this.state.showPersons){
       persons = (
         <div >
           {this.state.persons.map((person, index) => {
-            return <Person
+            return <ErrorBoundary key={person.id}><Person
                     click={() => this.deletePerson(person.id)}
                     name={person.name} 
                     age={person.age}
-                    key={person.id}
-                    changed={(event) => this.nameChangeHandler(event, person.id)} />
+                    changed={(event) => this.nameChangeHandler(event, person.id)} /></ErrorBoundary>
           })}
         </div> 
       );
-
-      style.backgroundColor = 'red';
+      btnClass = classes.Red;
     }
 
-    let classes = [];
+    let assignedClasses = [];
     if(this.state.persons.length <= 2){
-      classes.push('red');
+      assignedClasses.push(classes.red);
     }
     if(this.state.persons.length <= 1){
-      classes.push('bold');
+      assignedClasses.push(classes.bold);
     }
 
 
     return (
-        <div className="App">
+        <div className={classes.App}>
           <h1>hi, i am react</h1>
-          <p className={classes.join(' ')}>this is really works</p>
-          <button 
-            style={style}
+          <p className={assignedClasses.join(' ')}>this is really works</p>
+          <button
+            className={btnClass}
             onClick={this.togglePersonsHandler}>switch name</button>
             {this.state.showPersons ? 
             persons : null
